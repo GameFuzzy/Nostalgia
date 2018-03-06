@@ -1,8 +1,10 @@
 #import <UIKit/UIKit.h>
 #define PLIST_PATH @"/Library/PreferenceLoader/Preferences/NostalgiaPrefs.plist"
 #define imgPath @"/Library/PreferenceBundles/NostalgiaPrefs.bundle/ccwall.png"
+#define imgModulePath @"/Library/PreferenceBundles/NostalgiaPrefs.bundle/ccmodule.png"
 bool kEnabled = YES;
 UIImageView *imgView = [[UIImageView alloc] init];
+UIImageView *moduleImgView = [[UIImageView alloc] init];
 static
 NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:PLIST_PATH];
 
@@ -20,21 +22,15 @@ NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile
 -(void)viewDidLoad{
 %orig;
 if(kEnabled == YES)
-  //Deleted for testing purposes [[prefs objectForKey:@"enabled"] boolValue]
-	//deleted for now(kEnabled == YES)
+  //Deleted until tweak is working properly [[prefs objectForKey:@"enabled"] boolValue]
   {
 	//Changing the CC background
 	MTMaterialView *MTView = MSHookIvar<MTMaterialView *>(self, "_backgroundView");
-  //[MTView removeFromSuperview];
   imgView.image = [UIImage imageWithContentsOfFile:imgPath];
-  UIView *pic1View = MSHookIvar<UIView *>(MTView, "_backdropView");
-	//imgView.alpha = pic1View.alpha; //Experiment to see how it looks with a lil opacity
-  [imgView setFrame:pic1View.frame];
-  [pic1View insertSubview:imgView atIndex:0];
+  UIView *picView = MSHookIvar<UIView *>(MTView, "_backdropView");
+  [imgView setFrame:picView.frame];
+  [picView insertSubview:imgView atIndex:0];
 
-	//Adding the picture as a subview does not make it fade away like _backdropView does
-
-	//Changing the CC modules (I probably need help with this one)
   }
 }
 -(void)presentAnimated:(BOOL)arg1 withCompletionHandler:(/*^block*/id)arg2{
@@ -48,5 +44,17 @@ if(kEnabled == YES)
   [UIImageView animateWithDuration:0.5 delay:0 options:0 animations:^{
   imgView.alpha = 0.0;}
   completion:0];
+}
+%end
+
+//This code isn't working because it's not accessing the right views
+%hook CCUIContentModuleContainerView
+-(void)viewDidLoad{
+%orig;
+MTMaterialView *MTModuleView = MSHookIvar<MTMaterialView *>(self, "_moduleMaterialView");
+UIView *picModuleView = MSHookIvar<UIView *>(MTModuleView, "_backdropView");
+moduleImgView.image = [UIImage imageWithContentsOfFile:imgModulePath];
+[moduleImgView setFrame:picModuleView.frame];
+[picModuleView insertSubview:moduleImgView atIndex:0];
 }
 %end
