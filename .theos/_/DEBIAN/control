@@ -1,0 +1,10 @@
+Package: com.zen.nostalgia
+Name: Nostalgia
+Depends: mobilesubstrate
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: Zen
+Author: Zen
+Section: Tweaks
+Version: 1.0-2+debug
+Installed-Size: 712
