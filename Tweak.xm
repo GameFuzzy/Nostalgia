@@ -37,22 +37,16 @@ if(kEnabled == YES)
 	//Changing the CC modules (I probably need help with this one)
   }
 }
-
--(id)_beginPresentationAnimated:(BOOL)arg1 interactive:(BOOL)arg2{
-  %orig;
+-(void)presentAnimated:(BOOL)arg1 withCompletionHandler:(/*^block*/id)arg2{
+ %orig;
   [UIImageView animateWithDuration:0.5 delay:0 options:0 animations:^{
   imgView.alpha = 1.0;}
   completion:0];
-
-  return self;
 }
-
--(id)_beginDismissalAnimated:(BOOL)arg1 interactive:(BOOL)arg2{
-  %orig;
+-(void)dismissAnimated:(BOOL)arg1 withCompletionHandler:(/*^block*/id)arg2{
+ %orig;
   [UIImageView animateWithDuration:0.5 delay:0 options:0 animations:^{
   imgView.alpha = 0.0;}
   completion:0];
-
-  return self;
 }
 %end
